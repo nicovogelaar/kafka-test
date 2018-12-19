@@ -1,7 +1,6 @@
 package kafka
 
 import (
-	"strconv"
 	"testing"
 	"time"
 
@@ -41,14 +40,16 @@ func BenchmarkConfluentProducer_Produce(b *testing.B) {
 	topic := "benchmark_topic"
 	topicPtr := &topic
 
+	msg := &kafka.Message{
+		TopicPartition: kafka.TopicPartition{Topic: topicPtr, Partition: kafka.PartitionAny},
+		Value:          []byte("message"),
+	}
+
 	b.Logf("%v", b.N)
 
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		err = producer.Produce(&kafka.Message{
-			TopicPartition: kafka.TopicPartition{Topic: topicPtr, Partition: kafka.PartitionAny},
-			Value:          []byte(strconv.Itoa(n)),
-		}, nil)
+		err = producer.Produce(msg, nil)
 		if err != nil {
 			b.Fatalf("failed to produce message: %v", err)
 		}
@@ -88,14 +89,16 @@ func BenchmarkConfluentProducer_ProduceChannel(b *testing.B) {
 	topic := "benchmark_topic"
 	topicPtr := &topic
 
+	msg := &kafka.Message{
+		TopicPartition: kafka.TopicPartition{Topic: topicPtr, Partition: kafka.PartitionAny},
+		Value:          []byte("message"),
+	}
+
 	b.Logf("%v", b.N)
 
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		producer.ProduceChannel() <- &kafka.Message{
-			TopicPartition: kafka.TopicPartition{Topic: topicPtr, Partition: kafka.PartitionAny},
-			Value:          []byte(strconv.Itoa(n)),
-		}
+		producer.ProduceChannel() <- msg
 	}
 
 	go func () {
