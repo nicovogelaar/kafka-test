@@ -43,14 +43,16 @@ func BenchmarkSaramaProducer_SyncProducer(b *testing.B) {
 
 	topic := "benchmark_topic"
 
+	msg := &sarama.ProducerMessage{
+		Topic: topic,
+		Value: sarama.StringEncoder("message"),
+	}
+
 	b.Logf("%v", b.N)
 
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		_, _, err = producer.SendMessage(&sarama.ProducerMessage{
-			Topic: topic,
-			Value: sarama.StringEncoder(n),
-		})
+		_, _, err = producer.SendMessage(msg)
 		if err != nil {
 			b.Fatalf("failed to produce message: %v", err)
 		}
@@ -80,14 +82,16 @@ func BenchmarkSaramaProducer_AsyncProducer(b *testing.B) {
 
 	topic := "benchmark_topic"
 
+	msg := &sarama.ProducerMessage{
+		Topic: topic,
+		Value: sarama.StringEncoder("message"),
+	}
+
 	b.Logf("%v", b.N)
 
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		producer.Input() <- &sarama.ProducerMessage{
-			Topic: topic,
-			Value: sarama.StringEncoder(n),
-		}
+		producer.Input() <- msg
 	}
 
 	if err = producer.Close(); err != nil {
