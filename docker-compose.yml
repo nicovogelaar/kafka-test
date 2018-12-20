@@ -3,9 +3,9 @@ services:
   kafka-test:
     build: .
     volumes:
-    - .:/src/kafka
-    command: "go test -v -mod=vendor -bench=. -benchtime=20s -benchmem"
-    working_dir: /src/kafka
+    - .:/src/kafka-test
+    command: 'go test -v -mod=vendor -bench=. -benchtime=20s -benchmem'
+    working_dir: /src/kafka-test
     depends_on:
     - kafka-zookeeper
     - kafka-broker
