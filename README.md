@@ -1,5 +1,4 @@
-# kafka-test
-[![Build Status](https://travis-ci.org/nicovogelaar/kafka-test.svg?branch=master)](https://travis-ci.org/nicovogelaar/kafka-test)
+# kafka-test [![Build Status](https://travis-ci.org/nicovogelaar/kafka-test.svg?branch=master)](https://travis-ci.org/nicovogelaar/kafka-test)
 ```
 BenchmarkConfluentProducer_Produce-2          	 5000000	      5483 ns/op	     324 B/op	       9 allocs/op
 --- BENCH: BenchmarkConfluentProducer_Produce-2
